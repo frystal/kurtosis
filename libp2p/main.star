@@ -6,7 +6,7 @@
 # kubo_config = import_module("github.com/frystal/kurtosis/kubo-config/test.star")
 
 def run(plan, args):
-    kubo_config_data = plan.upload_files("github.com/frystal/kurtosis/libp2p/kubo_config", name="kubog")
+    kubo_config_data = plan.upload_files("github.com/frystal/kurtosis/libp2p/kubo-config/config", name="kubo_config")
     kubo = plan.add_service(
         name = "kubo-victim",
         config = ServiceConfig(
@@ -17,7 +17,7 @@ def run(plan, args):
                 "Gateway":PortSpec(8080),
             },
             files={
-                "/root": kubo_config_data,
+                "/data/ipfs": kubo_config_data,
             },
             env_vars={
                 "GOLOG_LOG_LEVEL" : "debug",
