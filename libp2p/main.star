@@ -17,7 +17,7 @@ def run(plan, args):
                 "Gateway":PortSpec(8080),
             },
             files={
-                "/data/ipfs": kubo_config_data,
+                "/root": kubo_config_data,
             },
             env_vars={
                 "GOLOG_LOG_LEVEL" : "debug",
