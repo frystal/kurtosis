@@ -4,14 +4,11 @@
 #     src = "./kubo-config.txt",
 # )
 # kubo_config = import_module("github.com/frystal/kurtosis/kubo-config/test.star")
-KUBO_CONFIG_FILENAME = "kubo-config"
+
 def run(plan, args):
-    # data_package_module_result = kubo_config.run(plan, {})
-    # print(data_package_module_result)
-    # Add a Lotus server
-    kubo_config_data = plan.upload_files("github.com/frystal/kurtosis/libp2p/kubo-config/config")
-    postgres = plan.add_service(
-        name = "kubo-bin",
+    kubo_config_data = plan.upload_files("github.com//frystal/kurtosis/libp2p/.../../test1.config", name="kubog")
+    kubo = plan.add_service(
+        name = "kubo-victim",
         config = ServiceConfig(
             image = "ipfs/kubo:latest",
             ports = {
@@ -19,17 +16,27 @@ def run(plan, args):
                 "RPC_API":PortSpec(5001),
                 "Gateway":PortSpec(8080),
             },
+            files={
+                "/root": kubo_config_data,
+            },
+            env_vars={
+                "GOLOG_LOG_LEVEL" : "debug",
+                "GOLOG_LOG_FMT" : "json",
+                "IPFS_FUSE_DEBUG": "",
+                "YAMUX_DEBUG": "",
+                "LIBP2P_DEBUG_RCMGR": "",
+
+            }
         ),
     )
 
-    kubo_log_exec_recipe = ExecRecipe(
-    command = ["ipfs", "log", "level", "all", "debug"],
-    )
-    result = plan.exec(
-    service_name = "kubo-bin",
+    # kubo_log_recipe = ExecRecipe(
+    # command = ["ipfs", "log", "level", "all", "debug"],
+    # )
+    # result = plan.exec(
+    # service_name = "kubo-victim",
 
-    recipe = kubo_log_exec_recipe,
-    )
-    plan.print(result["output"])
-    plan.print(result["code"])
+    # recipe = kubo_log_recipe,
+    # )
+    
 
